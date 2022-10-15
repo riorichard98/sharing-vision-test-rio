@@ -8,7 +8,6 @@ class Post{
             VALUES('${data.title}','${data.content}','${data.category}','${currentTimeGetter()}',
             '${currentTimeGetter()}','${data.status}')` 
             const response = await Db.query(queryStr)
-            console.log(response);
             return response
         } catch (error) {
             throw(error)
@@ -17,7 +16,7 @@ class Post{
 
     static async readAllPosts(limit,offset){
         try {
-            const queryStr = `SELECT * FROM posts ORDER BY id LIMIT ${limit} OFFSET ${offset}`
+            const queryStr = `SELECT * FROM posts ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`
             const response = await Db.query(queryStr)
             return response
         } catch (error) {
@@ -29,7 +28,7 @@ class Post{
         try {
             const queryStr = `SELECT * FROM posts WHERE id = ${id}`
             const response = await Db.query(queryStr)
-            return response[0]
+            return response.rows[0]
         } catch (error) {
             throw(error)
         }
@@ -38,8 +37,8 @@ class Post{
     static async updatePost(data,id){
         try {
             const queryStr = `UPDATE posts 
-            SET Title='${data.title}',Content='${data.content}',Category='${data.category}',Status='${data.status}',
-            Updated_date='${currentTimeGetter()}' WHERE id = ${id}`
+            SET "Title"='${data.title}',"Content"='${data.content}',"Category"='${data.category}',
+            "Status"='${data.status}',"Updated_date"='${currentTimeGetter()}' WHERE id = ${id}`
             const response = await Db.query(queryStr)
             return response
         } catch (error) {

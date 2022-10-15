@@ -20,8 +20,6 @@ class Db {
             console.log('database connection error');
             console.log(error);
             throw (errorVariables(500,'Internal server error'))
-        } finally{
-            await pool.end()
         }
     }
 } 

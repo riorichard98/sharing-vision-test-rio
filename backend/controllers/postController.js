@@ -7,12 +7,53 @@ class PostController{
         try {
             postValidator(req.body)
             await Post.createPost(req.body)
-            res.status(200).json({message:'Success creating new post'})
+            res.status(201).json({message:'Success creating new post'})
         } catch (error) {
-            console.log(error);
-            if(error.type === 'known'){
-                res.status(error.code).json({message:error.message})
-            }
+            next(error)
+        }
+    }
+
+    static async getAllPost(req,res,next){
+        try {
+            const {offset,limit} = req.params
+            const response = await Post.readAllPosts(limit,offset)
+            res.status(200).json(response.rows)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async getPostDetail(req,res,next){
+        try {
+            const {id} = req.params
+            const response = await Post.readPostDetail(id)
+            if(!response) throw(errorVariables(404,'post not found'))
+            res.status(200).json(response)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async updatePost(req,res,next){
+        try {
+            const {id} = req.params
+            postValidator(req.body)
+            const response = await Post.updatePost(req.body,id)
+            if(!response.rowCount) throw(errorVariables(404,'post not found'))
+            res.status(201).json({message:'Success updating a post'})
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async deletePost(req,res,next){
+        try {
+            const {id} = req.params
+            const response = await Post.deletePost(id)
+            if(!response.rowCount) throw(errorVariables(404,'post not found'))
+            res.status(201).json({message:'Success deleting a post'})
+        } catch (error) {
+            next(error)
         }
     }
 }

@@ -3,11 +3,11 @@ const { errorVariables } = require('../helpers/errorVars') // for making error v
 
 // using cloud database heroku
 const pool = new Pool({
-    user: 'pwdlyfcikyreat',
-    host: 'ec2-54-160-200-167.compute-1.amazonaws.com',
-    database: 'd32ka2q7rl56n8',
-    password: 'ce6b866ec7f21823b30be5e77f3c67fa2800a3963dd9245c15443a5e5c4d6459',
-    port: 5432,
+    user: process.env.USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    password: process.env.PASSWORD,
+    port: process.env.PORT,
     ssl: { rejectUnauthorized: false }
 })
 
@@ -15,15 +15,16 @@ class Db {
     static async query(queryStr) {
         try {
             const res = await pool.query(queryStr)
-            return res
+            return res.rows[0]
         } catch (error) {
             console.log('database connection error');
+            console.log(error);
             throw (errorVariables(500,'Internal server error'))
         } finally{
-            pool.end()
+            await pool.end()
         }
     }
-}
+} 
 
 module.exports = {
     Db

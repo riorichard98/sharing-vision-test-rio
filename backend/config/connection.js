@@ -15,7 +15,7 @@ class Db {
     static async query(queryStr) {
         try {
             const res = await pool.query(queryStr)
-            return res.rows[0]
+            return res
         } catch (error) {
             console.log('database connection error');
             console.log(error);

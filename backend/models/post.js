@@ -4,10 +4,11 @@ const { currentTimeGetter } = require("../helpers/currentTimeGetter");
 class Post{
     static async createPost(data){
         try {
-            const queryStr = `INSERT INTO posts (Title,Content,Category,Created_date,Updated_date,Status)
+            const queryStr = `INSERT INTO posts ("Title","Content","Category","Created_date","Updated_date","Status")
             VALUES('${data.title}','${data.content}','${data.category}','${currentTimeGetter()}',
-            '${currentTimeGetter()}','${data.status}')`
+            '${currentTimeGetter()}','${data.status}')` 
             const response = await Db.query(queryStr)
+            console.log(response);
             return response
         } catch (error) {
             throw(error)

@@ -1,4 +1,5 @@
 const { Pool } = require('pg')
+const { errorVariables } = require('../helpers/errorVars') // for making error variables and codes e.g 500 , 400 ,404
 
 // using cloud database heroku
 const pool = new Pool({
@@ -11,16 +12,19 @@ const pool = new Pool({
 })
 
 class Db {
-    static async get(query) {
+    static async query(queryStr) {
         try {
-            const res = await pool.query(query)
-            return res.rows[0]
+            const res = await pool.query(queryStr)
+            return res
         } catch (error) {
-            console.log('error in connecting to database');
+            console.log('database connection error');
+            throw (errorVariables(500,'Internal server error'))
         } finally{
             pool.end()
         }
     }
 }
 
-module.exports = Db
+module.exports = {
+    Db
+}

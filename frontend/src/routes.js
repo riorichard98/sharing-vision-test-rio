@@ -5,7 +5,7 @@ import {
 import App from './App';
 import ErrorPage from './views/errorPage';
 import AllPost from "./views/allPostPage";
-
+import AddPost from "./views/AddPost";
  const router = createBrowserRouter([
     {
         path: "/",
@@ -18,7 +18,7 @@ import AllPost from "./views/allPostPage";
             },
             {
               path: "add-post",
-              element: <div>this is add post</div>,
+              element: <AddPost/>,
             },
             {
               path: "preview",

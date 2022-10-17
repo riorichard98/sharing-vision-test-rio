@@ -22,23 +22,28 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import ErrorAlert from './components/ErrorAlert'
 const drawerWidth = 240;
 
 function App() {
   const [open, setOpen] = React.useState(true);
-  const [page, setPage] = React.useState('allPost')
+  const [page, setPage] = React.useState(false)
   const navigate = useNavigate();
-
   const handleClick = () => {
     setOpen(!open);
   };
 
+  React.useEffect(()=>{
+    if(window.location.href === 'http://localhost:3001') setPage('allPost')
+    if(window.location.href === 'http://localhost:3001/add-post') setPage('addNew')
+    if(window.location.href === 'http://localhost:3001/preview') setPage('preview')
+  })
   // sidebar button handler
-  const buttonHandler = (page) =>{
+  const buttonHandler = (page) => {
     setPage(page)
-    if(page === 'allPost') navigate("/")
-    if(page === 'addNew') navigate("/add-post")
-    if(page === 'preview') navigate("/preview")
+    if (page === 'allPost') navigate("/")
+    if (page === 'addNew') navigate("/add-post")
+    if (page === 'preview') navigate("/preview")
   }
   return (
     <Box sx={{ display: "flex" }}>
@@ -84,25 +89,25 @@ function App() {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton
-              disableRipple
-              onClick={() => buttonHandler('allPost')} 
-              sx={{ pl: 4 ,backgroundColor: page === 'allPost' ? '#5cabe1' : ''}}>
+                disableRipple
+                onClick={() => buttonHandler('allPost')}
+                sx={{ pl: 4, backgroundColor: page === 'allPost' ? '#5cabe1' : '' }}>
                 <ListItemIcon>
                   <AllInclusiveTwoToneIcon />
                 </ListItemIcon>
                 <ListItemText primary="All Posts" />
               </ListItemButton>
-              <ListItemButton 
-              onClick={() => buttonHandler('addNew')}
-              sx={{ pl: 4 ,backgroundColor: page === 'addNew' ? '#5cabe1' : ''}}>
+              <ListItemButton
+                onClick={() => buttonHandler('addNew')}
+                sx={{ pl: 4, backgroundColor: page === 'addNew' ? '#5cabe1' : '' }}>
                 <ListItemIcon>
                   <AddIcon />
                 </ListItemIcon>
                 <ListItemText primary="Add New" />
               </ListItemButton>
               <ListItemButton
-              onClick={() => buttonHandler('preview')} 
-              sx={{ pl: 4 ,backgroundColor: page === 'preview' ? '#5cabe1' : ''}}>
+                onClick={() => buttonHandler('preview')}
+                sx={{ pl: 4, backgroundColor: page === 'preview' ? '#5cabe1' : '' }}>
                 <ListItemIcon>
                   <PreviewIcon />
                 </ListItemIcon>
@@ -118,6 +123,7 @@ function App() {
         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
       >
         <Toolbar />
+        <ErrorAlert/>
         <Outlet />
       </Box>
     </Box>

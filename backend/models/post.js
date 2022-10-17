@@ -14,12 +14,18 @@ class Post{
         }
     }
 
-    static async readAllPosts(limit,offset){
+    static async readAllPosts(limit,offset,status){
         try {
-            const queryStr = `SELECT * FROM posts ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`
-            const response = await Db.query(queryStr)
-            return response
+            const queryStr = `SELECT * FROM posts ${status? 'WHERE "Status" = ' + "'" +status+ "'" : ''} 
+            ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`
+            const queryStr2 = `SELECT COUNT(case "Status" when 'publish' then 1 else null end)AS publishCount,
+            COUNT(case "Status" when 'draft' then 1 else null end)AS draftCount,
+            COUNT(case "Status" when 'thrash' then 1 else null end)AS thrashCount
+            FROM posts`
+            const [posts,counter] = await Promise.all([Db.query(queryStr),Db.query(queryStr2)])
+            return {posts:posts.rows,counter:counter.rows}
         } catch (error) {
+            console.log(error);
             throw(error)
         }
     }

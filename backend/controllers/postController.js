@@ -16,8 +16,10 @@ class PostController{
     static async getAllPost(req,res,next){
         try {
             const {offset,limit} = req.params
-            const response = await Post.readAllPosts(limit,offset)
-            res.status(200).json(response.rows)
+            let status = req.query.status ? req.query.status : false
+            if(status != 'publish' && status != 'draft' && status != 'thrash') status = false
+            const response = await Post.readAllPosts(limit,offset,status)
+            res.status(200).json(response)
         } catch (error) {
             next(error)
         }
